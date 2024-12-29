@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "start": "npx ts-node src/main.ts",
-    "start-prod": "node ./dist/main.js"
+    "start": "npx ts-node src/index.ts",
+    "start-prod": "node ./dist/app.js"
   }
 }

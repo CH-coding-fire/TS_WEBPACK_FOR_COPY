@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   target: 'node',  // Important: this tells webpack we're building for Node.js
-  entry: './src/main.ts',
+  entry: './src/index.ts',
   module: {
     rules: [
       {
@@ -16,7 +16,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'main.js',
+    filename: 'app.js',
     path: path.resolve(__dirname, 'dist'),
   },
 };
