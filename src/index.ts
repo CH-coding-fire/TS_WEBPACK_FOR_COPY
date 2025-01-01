@@ -1,11 +1,20 @@
 import dotenv from 'dotenv';
-import { main } from './main';
 dotenv.config();
+import { main } from './main';
+import { connectMongoDB } from './db/mongoDbConnect';
+import { sendTg } from './service/notifications/sendTg';
+import { askChatGPT } from './api/openAiApi';
 
+const runMainRepeatedly = async (ms: string | undefined) => {
 
-const runMainRepeatedly = (ms: string | undefined) => {
     if (!ms || isNaN(parseInt(ms))) {
       throw new Error('REPEAT_INTERVAL_MS is not set or is not a number');
+    }
+    try {
+      await connectMongoDB(); //this is optional
+    } catch (error) {
+      console.error('Error connecting to MongoDB:', error);
+      throw error;
     }
     console.log(`Launch successful, repeat interval: ${ms}ms`);
     try {
@@ -14,7 +23,14 @@ const runMainRepeatedly = (ms: string | undefined) => {
       }, parseInt(ms));
     } catch (error) {
       console.error('Error running main repeatedly:', error);
+      sendTg(`${error}`);
     }
+    const response = await askChatGPT([{role: "user", content: "I want to ask, 1 cat vs thousands of ants, who wins, simulate the battle?"}]);
+    console.log(response.choices[0].message.content);
   }
   
   runMainRepeatedly(process.env.REPEAT_INTERVAL_MS);
+
+
+
+
